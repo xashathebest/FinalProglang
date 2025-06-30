@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Function Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        #chart-container.hidden {
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+<nav class="flex items-center justify-between px-8 py-4 bg-white shadow mb-6 rounded-lg"> 
+    <div class="flex items-center">
+        <img src="/static/image 3.png" alt="Logo" class="logo h-12 w-auto">
+    </div>
+    <ul class="flex space-x-8">
+        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">Home</a></li>
+        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">Overview</a></li>
+        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">About Us</a></li>
+        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">Solve Now!</a></li>
+    </ul>
+</nav>
+
+
+<h2 id="modeTitle" class="text-4xl font-bold text-blue-800 mb-4">Quadratic</h2>
+<div class="flex flex-row justify-center gap-60 mt-6">
+    <!-- Left: Inputs and Solution -->
+    <div class="flex flex-col gap-6 min-w-[320px] max-w-[500px]">
+        <div class="input-panel bg-blue-50 p-8 rounded-lg shadow">
+            <form id="calcForm">
+                <div id="inputArea" class="flex gap-2 mb-4">
+                    <input name="a" placeholder="a" value="1" class="border border-blue-300 rounded px-3 py-2 w-16 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <input name="b" placeholder="b" value="0" class="border border-blue-300 rounded px-3 py-2 w-16 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <input name="c" placeholder="c" value="0" class="border border-blue-300 rounded px-3 py-2 w-16 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Solve</button>
+            </form>
+        </div>
+        <div class="output-container bg-white p-8 rounded-lg shadow">
+            <pre id="output" style="white-space: pre-wrap;"></pre>
+        </div>
+    </div>
+    <!-- Right: Chart -->
+    <div class="-mt-20 ">
+    <div id="chart-container" class="bg-white p-4 rounded-lg shadow flex items-center justify-center min-w-[400px] max-w-[600px] ">
+        <canvas id="chart"></canvas>
+    </div>
+    </div>
+</div>
+<div class="absolute bottom-20 left-16">
+<div class="mode-buttons flex flex-wrap justify-center gap-4 mt-8">
+    <button onclick="setMode('fibonacci')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Fibonacci</button>
+    <button onclick="setMode('factorial')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Factorial</button>
+    <button onclick="setMode('quadratic')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Quadratic</button>
+    <button onclick="setMode('prime')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Prime</button>
+</div>
+</div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
