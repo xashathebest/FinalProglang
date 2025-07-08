@@ -6,7 +6,81 @@
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        .nav-link.text-blue-600:after {
+            width: 100%;
+        }
+        .function-btn {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 140px;
+            text-align: center;
+        }
+        .function-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .param-card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+        }
+        .loader {
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .result-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%);
+            z-index: 5;
+        }
+        .function-active {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body class="relative min-h-screen overflow-hidden">
     <!-- Video Background -->
@@ -15,7 +89,7 @@
         Your browser does not support the video tag.
     </video>
     <!-- Overlay for contrast -->
-    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
+    <div class="video-overlay z-10"></div>
 
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b relative z-20">
@@ -36,25 +110,25 @@
     </nav>
 
     <!-- Calculator Content -->
-    <div class="relative z-20">
-        <div class="max-w-7xl mx-auto px-4 py-8">
-            <h1 class="text-3xl font-bold text-gray-100 mb-8 text-center pt-20">Mathematical Calculator</h1>
+    <div class="relative z-20 pt-8 pb-20">
+        <div class="max-w-7xl mx-auto px-4 ">
+            <h1 class="text-3xl font-bold text-white mb-8 text-center">Mathematical Calculator</h1>
             
             <!-- Function Selection -->
-            <div class="flex justify-center mb-8">
-                <div id="function-buttons" class="flex space-x-4">
-                    <button onclick="selectFunction('fibonacci')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Fibonacci</button>
-                    <button onclick="selectFunction('factorial')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Factorial</button>
-                    <button onclick="selectFunction('quadratic')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Quadratic</button>
-                    <button onclick="selectFunction('prime')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Prime</button>
+            <div class="flex justify-center mb-10">
+                <div id="function-buttons" class="flex flex-wrap justify-center gap-4">
+                    <button onclick="selectFunction('fibonacci')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors">Fibonacci</button>
+                    <button onclick="selectFunction('factorial')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors">Factorial</button>
+                    <button onclick="selectFunction('quadratic')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors">Quadratic</button>
+                    <button onclick="selectFunction('prime')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors">Prime</button>
                 </div>
             </div>
 
             <!-- Calculator Interface -->
-            <div id="calculator-interface" class="hidden">
+            <div id="calculator-interface" class="hidden fade-in">
                 <div class="max-w-6xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 id="modeTitle" class="text-2xl font-bold text-gray-100"></h2>
+                        <h2 id="modeTitle" class="text-2xl font-bold text-white"></h2>
                         <button onclick="resetFunctionButtons()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm">
                             ← Back to Functions
                         </button>
@@ -63,28 +137,35 @@
                     <div class="grid lg:grid-cols-2 gap-8">
                         <!-- Left: Inputs and Solution -->
                         <div class="space-y-6">
-                            <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-sm border">
-                                <form id="calcForm">
-                                    <div id="inputArea" class="flex gap-3 mb-4">
-                                        <!-- Input fields will be dynamically generated -->
+                            <div class="param-card p-6">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Parameters</h3>
+                                <div id="inputArea" class="space-y-4 mb-6">
+                                    <!-- Input fields will be dynamically generated here -->
+                                </div>
+                                <div class="flex items-center">
+                                    <button onclick="calculate()" id="calculate-btn" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md">Solve</button>
+                                    <div id="loader" class="ml-4" style="display: none;">
+                                        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-8 w-8"></div>
                                     </div>
-                                    <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">Solve</button>
-                                </form>
+                                </div>
                             </div>
                             
-                            <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-sm border">
+                            <div class="result-card p-6">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Solution</h3>
                                 <div id="output" class="text-gray-700"></div>
                             </div>
                         </div>
                         
                         <!-- Right: Chart/Visualization -->
-                        <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-sm border">
-                            <div id="chart-container" class="hidden">
-                                <canvas id="chart"></canvas>
-                            </div>
-                            <div id="fibonacci-spiral" class="hidden">
-                                <!-- Fibonacci spiral will be rendered here -->
+                        <div class="param-card p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Visualization</h3>
+                            <div id="visualization-area">
+                                <div id="chart-container" class="h-80">
+                                    <canvas id="chart"></canvas>
+                                </div>
+                                <div id="fibonacci-spiral" class="hidden">
+                                    <!-- Fibonacci spiral will be rendered here -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -93,6 +174,302 @@
         </div>
     </div>
 
-    <script src="/static/script.js"></script>
+    <script>
+        // Global variables
+        let currentFunction = '';
+        let chart = null;
+
+        // Function selection
+        function selectFunction(funcName) {
+            currentFunction = funcName;
+            
+            // Show calculator interface
+            document.getElementById('calculator-interface').classList.remove('hidden');
+            document.getElementById('calculator-interface').classList.add('fade-in');
+            
+            // Set mode title
+            const modeTitle = document.getElementById('modeTitle');
+            modeTitle.textContent = funcName.charAt(0).toUpperCase() + funcName.slice(1) + ' Calculator';
+            
+            // Highlight selected button
+            document.querySelectorAll('.function-btn').forEach(btn => {
+                btn.classList.remove('function-active', 'bg-blue-700');
+                btn.classList.add('bg-blue-600');
+            });
+            const activeBtn = Array.from(document.querySelectorAll('.function-btn')).find(btn => 
+                btn.getAttribute('onclick').includes(`'${funcName}'`)
+            );
+            if (activeBtn) {
+                activeBtn.classList.add('function-active', 'bg-blue-700');
+            }
+            
+            // Clear previous inputs and output
+            document.getElementById('inputArea').innerHTML = '';
+            document.getElementById('output').innerHTML = '';
+            document.getElementById('chart-container').classList.add('hidden');
+            document.getElementById('fibonacci-spiral').classList.add('hidden');
+            
+            // Create input fields based on function
+            let inputHTML = '';
+            switch(funcName) {
+                case 'fibonacci':
+                case 'factorial':
+                case 'prime':
+                    inputHTML = `
+                        <div class="flex items-center">
+                            <label class="block text-gray-700 font-medium mr-3 w-24">Value:</label>
+                            <input type="number" id="n-value" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" min="0" placeholder="Enter a positive integer">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'quadratic':
+                    inputHTML = `
+                        <div class="flex items-center">
+                            <label class="block text-gray-700 font-medium mr-3 w-24">a:</label>
+                            <input type="number" step="0.1" id="a-value" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Coefficient of x² (non-zero)">
+                        </div>
+                        <div class="flex items-center">
+                            <label class="block text-gray-700 font-medium mr-3 w-24">b:</label>
+                            <input type="number" step="0.1" id="b-value" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Coefficient of x">
+                        </div>
+                        <div class="flex items-center">
+                            <label class="block text-gray-700 font-medium mr-3 w-24">c:</label>
+                            <input type="number" step="0.1" id="c-value" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Constant term">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            document.getElementById('inputArea').innerHTML = inputHTML;
+        }
+
+        function resetFunctionButtons() {
+            // Hide calculator interface
+            document.getElementById('calculator-interface').classList.add('hidden');
+            
+            // Reset function buttons
+            document.querySelectorAll('.function-btn').forEach(btn => {
+                btn.classList.remove('function-active', 'bg-blue-700');
+                btn.classList.add('bg-blue-600');
+            });
+            
+            currentFunction = '';
+        }
+
+        // Calculation function
+        async function calculate() {
+            if (!currentFunction) return;
+            
+            const loader = document.getElementById('loader');
+            const outputDiv = document.getElementById('output');
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            // Show loader, disable button
+            loader.style.display = 'block';
+            calculateBtn.disabled = true;
+            outputDiv.innerHTML = '';
+            
+            try {
+                let url = `/calculate?mode=${currentFunction}`;
+                let errorMsg = '';
+                
+                switch(currentFunction) {
+                    case 'fibonacci':
+                    case 'factorial':
+                    case 'prime':
+                        const n = document.getElementById('n-value').value;
+                        if (!n || isNaN(n) || n < 0) {
+                            errorMsg = 'Please enter a valid positive number for n';
+                        } else {
+                            url += `&n=${n}`;
+                        }
+                        break;
+                        
+                    case 'quadratic':
+                        const a = document.getElementById('a-value').value;
+                        const b = document.getElementById('b-value').value;
+                        const c = document.getElementById('c-value').value;
+                        
+                        if (!a || isNaN(a) || parseFloat(a) === 0) {
+                            errorMsg = 'Please enter a valid non-zero number for a';
+                        } else if (!b || isNaN(b)) {
+                            errorMsg = 'Please enter a valid number for b';
+                        } else if (!c || isNaN(c)) {
+                            errorMsg = 'Please enter a valid number for c';
+                        } else {
+                            url += `&a=${a}&b=${b}&c=${c}`;
+                        }
+                        break;
+                }
+                
+                if (errorMsg) {
+                    throw new Error(errorMsg);
+                }
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                displayResult(result);
+            } catch (error) {
+                outputDiv.innerHTML = `
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">${error.message}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } finally {
+                loader.style.display = 'none';
+                calculateBtn.disabled = false;
+            }
+        }
+
+        // Display result
+        function displayResult(data) {
+            const outputDiv = document.getElementById('output');
+            const chartContainer = document.getElementById('chart-container');
+            const fibonacciSpiral = document.getElementById('fibonacci-spiral');
+            
+            // Reset visualization areas
+            chartContainer.classList.add('hidden');
+            fibonacciSpiral.classList.add('hidden');
+            
+            if (currentFunction === 'quadratic') {
+                // Quadratic results with graph
+                outputDiv.innerHTML = `
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-1">Solution:</h4>
+                            <p class="text-gray-700">${data.roots}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-1">Explanation:</h4>
+                            <p class="text-gray-700">${data.explanation}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Show and draw the graph
+                chartContainer.classList.remove('hidden');
+                drawGraph(data.x, data.y);
+            } else if (currentFunction === 'fibonacci') {
+                // Fibonacci results with spiral visualization
+                outputDiv.innerHTML = `
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-1">Explanation:</h4>
+                        <p class="text-gray-700">${data.explanation}</p>
+                    </div>
+                `;
+                
+                // Show Fibonacci spiral visualization
+                fibonacciSpiral.classList.remove('hidden');
+                // Here you would implement the spiral visualization
+                fibonacciSpiral.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="inline-block bg-gray-100 p-6 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-4">Fibonacci Spiral</h4>
+                            <p class="text-gray-600">Visualization would appear here</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Other function results
+                outputDiv.innerHTML = `
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-1">Explanation:</h4>
+                        <p class="text-gray-700">${data.explanation}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Draw graph function
+        function drawGraph(xVals, yVals) {
+            const ctx = document.getElementById('chart').getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (chart) {
+                chart.destroy();
+            }
+            
+            // Create new chart
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xVals.map(x => x.toFixed(1)),
+                    datasets: [{
+                        label: 'y = ax² + bx + c',
+                        data: yVals,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        zoom: {
+                            zoom: {
+                                wheel: {
+                                    enabled: true,
+                                },
+                                pinch: {
+                                    enabled: true
+                                },
+                                mode: 'xy',
+                            },
+                            pan: {
+                                enabled: true,
+                                mode: 'xy',
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'x-axis',
+                                color: '#4b5563',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'y-axis',
+                                color: '#4b5563',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
