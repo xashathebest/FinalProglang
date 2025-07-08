@@ -5,9 +5,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="relative min-h-screen">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+        <source src="/static/video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <!-- Overlay for contrast -->
+    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
+
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b">
+    <nav class="bg-white shadow-sm border-b relative z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -25,43 +33,45 @@
     </nav>
 
     <!-- About Us Content -->
-    <div class="max-w-4xl mx-auto px-4 py-12">
-        <h1 class="text-4xl font-bold text-gray-900 mb-8">About Us</h1>
-        <div class="bg-white rounded-lg shadow-sm border p-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Our Mission</h2>
-            <p class="text-gray-600 mb-6 leading-relaxed">
-                We believe that mathematics should be accessible, understandable, and beautiful. Our goal is to 
-                bridge the gap between complex mathematical concepts and practical understanding through 
-                interactive visualizations and clear explanations.
-            </p>
-            
-            <div class="grid md:grid-cols-2 gap-8 mb-8">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">What We Do</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li>• Provide step-by-step mathematical solutions</li>
-                        <li>• Create interactive visualizations</li>
-                        <li>• Make complex math concepts accessible</li>
-                        <li>• Support multiple mathematical functions</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Our Values</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li>• Clarity in mathematical explanations</li>
-                        <li>• User-friendly interface design</li>
-                        <li>• Educational value in every calculation</li>
-                        <li>• Continuous improvement and innovation</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="bg-gray-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Technology Stack</h3>
-                <p class="text-gray-600">
-                    Built with modern web technologies including Go for backend calculations, 
-                    Chart.js for data visualization, and Tailwind CSS for clean, responsive design.
+    <div class="relative z-20">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl font-bold text-white mb-8">About Us</h1>
+            <div class="bg-white rounded-lg shadow-sm border p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Our Mission</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    We believe that mathematics should be accessible, understandable, and beautiful. Our goal is to 
+                    bridge the gap between complex mathematical concepts and practical understanding through 
+                    interactive visualizations and clear explanations.
                 </p>
+                
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">What We Do</h3>
+                        <ul class="text-gray-600 space-y-2">
+                            <li>• Provide step-by-step mathematical solutions</li>
+                            <li>• Create interactive visualizations</li>
+                            <li>• Make complex math concepts accessible</li>
+                            <li>• Support multiple mathematical functions</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Our Values</h3>
+                        <ul class="text-gray-600 space-y-2">
+                            <li>• Clarity in mathematical explanations</li>
+                            <li>• User-friendly interface design</li>
+                            <li>• Educational value in every calculation</li>
+                            <li>• Continuous improvement and innovation</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Technology Stack</h3>
+                    <p class="text-gray-600">
+                        Built with modern web technologies including Go for backend calculations, 
+                        Chart.js for data visualization, and Tailwind CSS for clean, responsive design.
+                    </p>
+                </div>
             </div>
         </div>
     </div>

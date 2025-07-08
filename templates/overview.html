@@ -5,65 +5,71 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-  <!-- Navigation -->
-        <nav class="bg-white shadow-sm border-b">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <img src="/static/image 3.png" alt="Logo" class="h-8 w-auto">
-                        <span class="ml-3 text-xl font-semibold text-gray-900">Arithmancy</span>
-                    </div>
-                    <div class="flex items-center space-x-8">
-                    <div class="flex items-center space-x-8">
-                        <a href="/" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                        <a href="/overview" class="nav-link text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Overview</a>
-                        <a href="/about" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">About Us</a>
-                        <a href="/solve" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Solve Now</a>
-                    </div>
+<body class="relative min-h-screen">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+        <source src="/static/video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <!-- Overlay for contrast -->
+    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/static/image 3.png" alt="Logo" class="h-8 w-auto">
+                    <span class="ml-3 text-xl font-semibold text-gray-900">Arithmancy</span>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/overview" class="nav-link text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Overview</a>
+                    <a href="/about" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">About Us</a>
+                    <a href="/solve" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Solve Now</a>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
     <!-- Overview Content -->
-    <div class="max-w-4xl mx-auto px-4 py-12">
-        <h1 class="text-4xl font-bold text-gray-900 mb-8">Overview</h1>
-        <div class="bg-white rounded-lg shadow-sm border p-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">What is Arithmancy?</h2>
-            <p class="text-gray-600 mb-6 leading-relaxed">
-                Arithmancy is a powerful mathematical calculator that helps you solve complex mathematical problems 
-                with step-by-step explanations. Our tool supports four main mathematical functions:
-            </p>
-            
-            <div class="grid md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Quadratic Equations</h3>
-                    <p class="text-gray-600 text-sm">Solve quadratic equations with visual graphs, find roots, and calculate vertex points.</p>
+    <div class="relative z-20">
+        <div class="max-w-4xl mx-auto px-4 ">
+            <h1 class="text-4xl font-bold text-white mb-8">Overview</h1>
+            <div class="bg-white rounded-lg shadow-sm border p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">What is Arithmancy?</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Arithmancy is a powerful mathematical calculator that helps you solve complex mathematical problems 
+                    with step-by-step explanations. Our tool supports four main mathematical functions:
+                </p>
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Quadratic Equations</h3>
+                        <p class="text-gray-600 text-sm">Solve quadratic equations with visual graphs, find roots, and calculate vertex points.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Fibonacci Sequences</h3>
+                        <p class="text-gray-600 text-sm">Generate Fibonacci sequences with beautiful spiral visualizations.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Factorial Calculations</h3>
+                        <p class="text-gray-600 text-sm">Calculate factorials with detailed step-by-step breakdowns.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Prime Number Generation</h3>
+                        <p class="text-gray-600 text-sm">Generate prime numbers and explore number theory concepts.</p>
+                    </div>
                 </div>
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Fibonacci Sequences</h3>
-                    <p class="text-gray-600 text-sm">Generate Fibonacci sequences with beautiful spiral visualizations.</p>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2">How to Use</h3>
+                    <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                        <li>Navigate to "Solve Now" to access the calculator</li>
+                        <li>Choose from the available mathematical functions</li>
+                        <li>Enter your parameters and click "Solve"</li>
+                        <li>View detailed explanations and visualizations</li>
+                    </ol>
                 </div>
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Factorial Calculations</h3>
-                    <p class="text-gray-600 text-sm">Calculate factorials with detailed step-by-step breakdowns.</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Prime Number Generation</h3>
-                    <p class="text-gray-600 text-sm">Generate prime numbers and explore number theory concepts.</p>
-                </div>
-            </div>
-            
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-blue-800 mb-2">How to Use</h3>
-                <ol class="list-decimal list-inside text-gray-700 space-y-2">
-                    <li>Navigate to "Solve Now" to access the calculator</li>
-                    <li>Choose from the available mathematical functions</li>
-                    <li>Enter your parameters and click "Solve"</li>
-                    <li>View detailed explanations and visualizations</li>
-                </ol>
             </div>
         </div>
     </div>
 </body>
-</html>
