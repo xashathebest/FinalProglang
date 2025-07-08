@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator - Arithmancy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="relative min-h-screen overflow-hidden">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+        <source src="/static/video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <!-- Overlay for contrast -->
+    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/static/image 3.png" alt="Logo" class="h-8 w-auto">
+                    <span class="ml-3 text-xl font-semibold text-gray-900 ">Arithmancy</span>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/overview" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Overview</a>
+                    <a href="/about" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">About Us</a>
+                    <a href="/solve" class="nav-link text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Solve Now</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Calculator Content -->
+    <div class="relative z-20">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold text-gray-100 mb-8 text-center pt-20">Mathematical Calculator</h1>
+            
+            <!-- Function Selection -->
+            <div class="flex justify-center mb-8">
+                <div id="function-buttons" class="flex space-x-4">
+                    <button onclick="selectFunction('fibonacci')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Fibonacci</button>
+                    <button onclick="selectFunction('factorial')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Factorial</button>
+                    <button onclick="selectFunction('quadratic')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Quadratic</button>
+                    <button onclick="selectFunction('prime')" class="function-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Prime</button>
+                </div>
+            </div>
+
+            <!-- Calculator Interface -->
+            <div id="calculator-interface" class="hidden">
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 id="modeTitle" class="text-2xl font-bold text-gray-100"></h2>
+                        <button onclick="resetFunctionButtons()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm">
+                            ← Back to Functions
+                        </button>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <!-- Left: Inputs and Solution -->
+                        <div class="space-y-6">
+                            <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-sm border">
+                                <form id="calcForm">
+                                    <div id="inputArea" class="flex gap-3 mb-4">
+                                        <!-- Input fields will be dynamically generated -->
+                                    </div>
+                                    <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">Solve</button>
+                                </form>
+                            </div>
+                            
+                            <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-sm border">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-3">Solution</h3>
+                                <div id="output" class="text-gray-700"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right: Chart/Visualization -->
+                        <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-sm border">
+                            <div id="chart-container" class="hidden">
+                                <canvas id="chart"></canvas>
+                            </div>
+                            <div id="fibonacci-spiral" class="hidden">
+                                <!-- Fibonacci spiral will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

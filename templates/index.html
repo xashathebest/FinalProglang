@@ -7,61 +7,75 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/style.css">
-    <style>
-        #chart-container.hidden {
-            display: none;
-        }
-    </style>
-
 </head>
-<body>
+<body class="relative min-h-screen overflow-hidden">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+        <source src="/static/video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <!-- Overlay for contrast -->
+    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
 
-<nav class="flex items-center justify-between px-8 py-4 bg-white shadow mb-6 rounded-lg"> 
-    <div class="flex items-center">
-        <img src="/static/image 3.png" alt="Logo" class="logo h-12 w-auto">
-    </div>
-    <ul class="flex space-x-8">
-        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">Home</a></li>
-        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">Overview</a></li>
-        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">About Us</a></li>
-        <li><a href="#" class=" bg-white text-black  hover:text-blue-600 font-medium">Solve Now!</a></li>
-    </ul>
-</nav>
-
-
-<h2 id="modeTitle" class="text-4xl font-bold text-blue-800 mb-4">Quadratic</h2>
-<div class="flex flex-row justify-center gap-60 mt-6">
-    <!-- Left: Inputs and Solution -->
-    <div class="flex flex-col gap-6 min-w-[320px] max-w-[500px]">
-        <div class="input-panel bg-blue-50 p-8 rounded-lg shadow">
-            <form id="calcForm">
-                <div id="inputArea" class="flex gap-2 mb-4">
-                    <input name="a" placeholder="a" value="1" class="border border-blue-300 rounded px-3 py-2 w-16 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <input name="b" placeholder="b" value="0" class="border border-blue-300 rounded px-3 py-2 w-16 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <input name="c" placeholder="c" value="0" class="border border-blue-300 rounded px-3 py-2 w-16 focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <!-- All Content Above Video -->
+    <div class="relative z-20">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <img src="/static/image 3.png" alt="Logo" class="h-8 w-auto">
+                        <span class="ml-3 text-xl font-semibold text-gray-900">Arithmancy</span>
+                    </div>
+                    <div class="flex items-center space-x-8">
+                        <a href="/" class="nav-link text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="/overview" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Overview</a>
+                        <a href="/about" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">About Us</a>
+                        <a href="/solve" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Solve Now</a>
+                    </div>
                 </div>
-                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Solve</button>
-            </form>
+            </div>
+        </nav>
+
+        <!-- Default Welcome Page -->
+        <div class="relative w-full min-h-screen">
+            <!-- Content -->
+            <div class="relative z-20">
+                <div class="max-w-4xl mx-auto px-4 py-12">
+                    <div class="text-center">
+                        <h1 class="text-4xl font-bold text-gray-100 mb-6 pt-20">Welcome to Arithmancy</h1>
+                        <p class="text-xl text-gray-200 mb-8">Your mathematical calculator with step-by-step explanations</p>
+                        <div class="flex justify-center space-x-4">
+                            <a href="/overview" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Learn More</a>
+                            <a href="/solve" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">Start Calculating</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="output-container bg-white p-8 rounded-lg shadow">
-            <pre id="output" style="white-space: pre-wrap;"></pre>
+
+        <!-- Overview Page -->
+        <div id="overview-page" class="page hidden">
+            <div class="max-w-4xl mx-auto px-4 py-12">
+                <!-- ... (rest of your overview content) ... -->
+            </div>
+        </div>
+
+        <!-- About Us Page -->
+        <div id="about-page" class="page hidden">
+            <div class="max-w-4xl mx-auto px-4 py-12">
+                <!-- ... (rest of your about content) ... -->
+            </div>
+        </div>
+
+        <!-- Solve Now Page (Main Calculator) -->
+        <div id="solve-page" class="page hidden">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <!-- ... (rest of your solve content) ... -->
+            </div>
         </div>
     </div>
-    <!-- Right: Chart -->
-    <div class="-mt-20 ">
-    <div id="chart-container" class="bg-white p-4 rounded-lg shadow flex items-center justify-center min-w-[400px] max-w-[600px] ">
-        <canvas id="chart"></canvas>
-    </div>
-    </div>
-</div>
-<div class="absolute bottom-20 left-16">
-<div class="mode-buttons flex flex-wrap justify-center gap-4 mt-8">
-    <button onclick="setMode('fibonacci')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Fibonacci</button>
-    <button onclick="setMode('factorial')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Factorial</button>
-    <button onclick="setMode('quadratic')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Quadratic</button>
-    <button onclick="setMode('prime')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Prime</button>
-</div>
-</div>
+
     <script src="/static/script.js"></script>
 </body>
 </html>
