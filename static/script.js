@@ -137,7 +137,7 @@ function resetFunctionButtons() {
     // Hide chart and spiral
     if (chartContainer) chartContainer.classList.add('hidden');
     if (fibonacciSpiral) fibonacciSpiral.classList.add('hidden');
-    removeFibFlexRow();
+    // removeFibFlexRow(); // No longer needed
 }
 
 function initChart() {
@@ -220,110 +220,34 @@ function calculateVertex(a, b, c) {
     return { x: vertexX, y: a * vertexX * vertexX + b * vertexX + c };
 }
 
-function createFibFlexRow() {
-    if (!inputArea) return;
-    
-    // Only for Fibonacci mode: create a flex row for input and spiral
-    let flexRow = document.getElementById('fib-flex-row');
-    if (!flexRow) {
-        flexRow = document.createElement('div');
-        flexRow.id = 'fib-flex-row';
-        flexRow.className = 'flex flex-col lg:flex-row gap-4 items-center justify-center mb-4';
-        if (inputArea.parentNode) {
-            inputArea.parentNode.insertBefore(flexRow, inputArea);
-        }
-    }
-    // Move inputArea into flexRow
-    if (inputArea && flexRow) {
-        flexRow.appendChild(inputArea);
-    }
-    // Add spiral canvas if not present
-    if (!fibCanvas) {
-        fibCanvas = document.createElement('canvas');
-        fibCanvas.id = 'fib-spiral';
-        fibCanvas.width = 220;
-        fibCanvas.height = 220;
-        fibCanvas.className = 'bg-white rounded-lg shadow-sm border';
-    }
-    if (!flexRow.contains(fibCanvas)) {
-        flexRow.appendChild(fibCanvas);
-    }
+// Animation helpers
+function animateIn(element, animationClass = 'fade-in') {
+    if (!element) return;
+    element.classList.remove('fade-in', 'slide-in');
+    void element.offsetWidth; // trigger reflow
+    element.classList.add(animationClass);
+    element.style.opacity = 1;
 }
-
-function removeFibFlexRow() {
-    let flexRow = document.getElementById('fib-flex-row');
-    if (flexRow) {
-        if (inputArea && flexRow.contains(inputArea)) {
-            flexRow.parentNode.insertBefore(inputArea, flexRow);
-        }
-        flexRow.remove();
-    }
-    removeFibCanvas();
+function animateOut(element, animationClass = 'fade-out') {
+    if (!element) return;
+    element.classList.remove('fade-in', 'slide-in');
+    void element.offsetWidth;
+    element.classList.add(animationClass);
+    element.style.opacity = 0;
 }
-
-function drawFibonacciSpiral(n) {
-    createFibFlexRow();
-    if (!fibCanvas) return;
-    
-    const ctx = fibCanvas.getContext('2d');
-    ctx.clearRect(0, 0, fibCanvas.width, fibCanvas.height);
-    // Draw spiral
-    let x = 110, y = 110, angle = 0;
-    let fib = [0, 1];
-    for (let i = 2; i < n; i++) fib.push(fib[i-1] + fib[i-2]);
-    let scale = 18 - Math.max(0, n-8)*1.5;
-    for (let i = 1; i < n; i++) {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(angle);
-        ctx.beginPath();
-        ctx.arc(0, 0, fib[i]*scale, Math.PI/2, Math.PI, false);
-        ctx.strokeStyle = `hsl(${i*40}, 70%, 50%)`;
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.restore();
-        // Draw box
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(angle);
-        ctx.strokeStyle = '#dbeafe';
-        ctx.strokeRect(0, 0, fib[i]*scale, fib[i]*scale);
-        ctx.restore();
-        // Move to next
-        switch (i % 4) {
-            case 1: x += fib[i]*scale; break;
-            case 2: y += fib[i]*scale; break;
-            case 3: x -= fib[i]*scale; break;
-            case 0: y -= fib[i]*scale; break;
-        }
-        angle += Math.PI/2;
-    }
-    // Draw numbers
-    x = 110; y = 110; angle = 0;
-    for (let i = 1; i < n; i++) {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(angle);
-        ctx.font = 'bold 14px Segoe UI, Arial';
-        ctx.fillStyle = '#2563eb';
-        ctx.fillText(fib[i], 10, 20);
-        ctx.restore();
-        switch (i % 4) {
-            case 1: x += fib[i]*scale; break;
-            case 2: y += fib[i]*scale; break;
-            case 3: x -= fib[i]*scale; break;
-            case 0: y -= fib[i]*scale; break;
-        }
-        angle += Math.PI/2;
-    }
-}
-
-function removeFibCanvas() {
-    if (fibCanvas && fibCanvas.parentNode) {
-        fibCanvas.parentNode.removeChild(fibCanvas);
-        fibCanvas = null;
-    }
-}
+// Add animation CSS
+(function addAnimationStyles() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+    .fade-in { animation: fadeInAnim 0.7s cubic-bezier(.4,0,.2,1); opacity: 1 !important; }
+    .fade-out { animation: fadeOutAnim 0.5s cubic-bezier(.4,0,.2,1); opacity: 0 !important; }
+    .slide-in { animation: slideInAnim 0.7s cubic-bezier(.4,0,.2,1); opacity: 1 !important; }
+    @keyframes fadeInAnim { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOutAnim { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes slideInAnim { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+    `;
+    document.head.appendChild(style);
+})();
 
 function setMode(m) {
     console.log('setMode called with:', m);
@@ -331,9 +255,12 @@ function setMode(m) {
     if (output) output.textContent = "";
     
     if (m === "quadratic") {
-        if (chartContainer) chartContainer.classList.remove('hidden');
+        if (chartContainer) {
+            chartContainer.classList.remove('hidden');
+            animateIn(chartContainer, 'slide-in');
+        }
         if (fibonacciSpiral) fibonacciSpiral.classList.add('hidden');
-        removeFibFlexRow();
+        // removeFibFlexRow(); // No longer needed
         if (!chart) initChart();
         if (inputArea) {
             inputArea.innerHTML = `
@@ -344,16 +271,19 @@ function setMode(m) {
         }
     } else if (m === "fibonacci") {
         if (chartContainer) chartContainer.classList.add('hidden');
-        if (fibonacciSpiral) fibonacciSpiral.classList.remove('hidden');
+        if (fibonacciSpiral) {
+            fibonacciSpiral.classList.remove('hidden');
+            animateIn(fibonacciSpiral, 'slide-in');
+        }
         if (inputArea) {
             inputArea.innerHTML = `<input name="n" placeholder="Enter n" value="10" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">`;
         }
-        createFibFlexRow();
+        // createFibFlexRow(); // No longer needed
         drawFibonacciSpiral(10); // default
     } else {
         if (chartContainer) chartContainer.classList.add('hidden');
         if (fibonacciSpiral) fibonacciSpiral.classList.add('hidden');
-        removeFibFlexRow();
+        // removeFibFlexRow(); // No longer needed
         if (inputArea) {
             inputArea.innerHTML = `<input name="n" placeholder="Enter n" value="10" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">`;
         }
